@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "nombre": "Ana",
+    "grupo": "A"
+  },
+    {
+    "id": 2,
+    "nombre": "Juan",
+    "grupo": "B"
+  },
+    {
+    "id": 3,
+    "nombre": "Miguel",
+    "grupo": "A"
+  },
+    {
+    "id": 4,
+    "nombre": "Edgar",
+    "grupo": "C"
+  },
+    {
+    "id": 5,
+    "nombre": "Luis",
+    "grupo": "C"
+  },
+    {
+    "id": 6,
+    "nombre": "Sofia",
+    "grupo": "B"
+  },
+    {
+    "id": 7,
+    "nombre": "Eduardo",
+    "grupo": "C"
+  }
+]
