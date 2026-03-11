@@ -1,13 +1,50 @@
-# React + TypeScript + Vite
+# Frontend - Sistema de Gestión de Alumnos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Esta es la aplicación frontend desarrollada con React + TypeScript + Tailwind CSS para gestionar alumnos.
 
-Currently, two official plugins are available:
+## Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✅ **Lista de alumnos** con tabla responsiva
+- ✅ **Búsqueda en tiempo real** por nombre o grupo
+- ✅ **Formulario modal** para agregar/editar alumnos
+- ✅ **Confirmación de eliminación** con modal
+- ✅ **Estadísticas visuales** (total alumnos, grupos activos)
+- ✅ **Estados de carga** y manejo de errores
+- ✅ **Diseño responsivo** con Tailwind CSS
+- ✅ **Validación de formularios**
+- ✅ **CRUD completo** (Crear, Leer, Actualizar, Eliminar)
 
-## React Compiler
+## Scripts Disponibles
+
+```bash
+# Instalar dependencias
+npm install
+
+# Ejecutar en desarrollo
+npm run dev
+
+# Construir para producción
+npm run build
+```
+
+## API Endpoints
+
+El frontend consume las siguientes API REST:
+
+- `GET /api/items` - Obtener todos los alumnos
+- `POST /api/items` - Crear nuevo alumno
+- `PUT /api/items/:id` - Actualizar alumno existente
+- `DELETE /api/items/:id` - Eliminar alumno
+
+## Modelo de Datos
+
+```typescript
+interface Alumno {
+  id: number;
+  nombre: string;
+  grupo: string; // 'A', 'B', 'C'
+}
+```
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
