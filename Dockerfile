@@ -4,6 +4,10 @@ FROM maven:3.9-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
+# Instalar Node.js y npm
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
+
 # Copiar archivos de configuración primero (para cache de Docker)
 COPY springboot/backend/pom.xml ./springboot/backend/
 COPY springboot/package*.json ./springboot/
@@ -11,7 +15,7 @@ COPY springboot/package*.json ./springboot/
 # Instalar dependencias NPM
 RUN cd /app/springboot && npm install
 
-# Copiar código fuente
+# Copiar código fuente completo
 COPY springboot ./springboot
 
 # Compilar frontend
@@ -19,7 +23,7 @@ RUN cd /app/springboot && npm run build
 
 # Copiar frontend compilado a recursos estáticos de Spring Boot
 RUN mkdir -p /app/springboot/backend/src/main/resources/static
-RUN cp -r /app/springboot/dist/* /app/springboot/backend/src/main/resources/static/ 2>/dev/null || echo "No dist files to copy"
+RUN if [ -d "/app/springboot/dist" ]; then cp -r /app/springboot/dist/* /app/springboot/backend/src/main/resources/static/; fi
 
 # Compilar backend con Maven
 RUN cd /app/springboot/backend && mvn clean package -DskipTests

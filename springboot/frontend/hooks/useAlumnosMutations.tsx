@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Alumno, CreateAlumnoRequest, api } from '../lib/api';
+import type { Alumno, CreateAlumnoRequest } from '../lib/api';
+import { api } from '../lib/api';
 
 export const useAlumnosMutations = () => {
   const [loading, setLoading] = useState(false);

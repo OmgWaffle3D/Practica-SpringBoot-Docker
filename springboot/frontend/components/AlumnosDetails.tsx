@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alumno, CreateAlumnoRequest } from '../lib/api';
+import type { Alumno, CreateAlumnoRequest } from '../lib/api';
 
 interface AlumnoFormProps {
   alumno?: Alumno | null;
@@ -11,10 +11,12 @@ interface AlumnoFormProps {
 export default function AlumnoForm({ alumno, onSave, onCancel, loading = false }: AlumnoFormProps) {
   const [nombre, setNombre] = useState(alumno?.nombre || '');
   const [grupo, setGrupo] = useState(alumno?.grupo || 'A');
-  const [errors, setErrors] = useState<{ nombre?: string; grupo?: string }>({});
+  const [email, setEmail] = useState(alumno?.email || '');
+  const [edad, setEdad] = useState(alumno?.edad?.toString() || '');
+  const [errors, setErrors] = useState<{ nombre?: string; grupo?: string; email?: string; edad?: string }>({});
 
   const validateForm = () => {
-    const newErrors: { nombre?: string; grupo?: string } = {};
+    const newErrors: { nombre?: string; grupo?: string; email?: string; edad?: string } = {};
     
     if (!nombre.trim()) {
       newErrors.nombre = 'El nombre es requerido';
@@ -22,6 +24,18 @@ export default function AlumnoForm({ alumno, onSave, onCancel, loading = false }
     
     if (!grupo) {
       newErrors.grupo = 'El grupo es requerido';
+    }
+    
+    if (!email.trim()) {
+      newErrors.email = 'El email es requerido';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = 'El email no es válido';
+    }
+    
+    if (!edad.trim()) {
+      newErrors.edad = 'La edad es requerida';
+    } else if (isNaN(Number(edad)) || Number(edad) < 16 || Number(edad) > 100) {
+      newErrors.edad = 'La edad debe ser un número entre 16 y 100';
     }
     
     setErrors(newErrors);
@@ -36,11 +50,13 @@ export default function AlumnoForm({ alumno, onSave, onCancel, loading = false }
     }
     
     try {
-      await onSave({ nombre: nombre.trim(), grupo });
+      await onSave({ nombre: nombre.trim(), grupo, email: email.trim(), edad: Number(edad) });
       if (!alumno) {
         // Reset form if creating new
         setNombre('');
         setGrupo('A');
+        setEmail('');
+        setEdad('');
       }
     } catch (error) {
       console.error('Error saving alumno:', error);
@@ -48,7 +64,7 @@ export default function AlumnoForm({ alumno, onSave, onCancel, loading = false }
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+    <div className="fixed inset-0 bg-gray-600/50 overflow-y-auto h-full w-full flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full mx-4">
         <h2 className="text-2xl font-bold mb-6 text-gray-900">
           {alumno ? 'Editar Alumno' : 'Agregar Nuevo Alumno'}
@@ -94,6 +110,48 @@ export default function AlumnoForm({ alumno, onSave, onCancel, loading = false }
             </select>
             {errors.grupo && (
               <p className="text-red-500 text-sm mt-1">{errors.grupo}</p>
+            )}
+          </div>
+          
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 ${
+                errors.email ? 'border-red-500' : 'border-gray-300'
+              }`}
+              placeholder="ejemplo@correo.com"
+              disabled={loading}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
+          </div>
+          
+          <div>
+            <label htmlFor="edad" className="block text-sm font-medium text-gray-700 mb-1">
+              Edad
+            </label>
+            <input
+              type="number"
+              id="edad"
+              value={edad}
+              onChange={(e) => setEdad(e.target.value)}
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 ${
+                errors.edad ? 'border-red-500' : 'border-gray-300'
+              }`}
+              placeholder="Edad del alumno"
+              min="16"
+              max="100"
+              disabled={loading}
+            />
+            {errors.edad && (
+              <p className="text-red-500 text-sm mt-1">{errors.edad}</p>
             )}
           </div>
           

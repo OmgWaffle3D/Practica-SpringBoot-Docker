@@ -4,7 +4,7 @@ import AlumnosList from '../components/AlumnosList';
 import AlumnoForm from '../components/AlumnosDetails';
 import { useAlumnos } from '../hooks/useAlumnos';
 import { useAlumnosMutations } from '../hooks/useAlumnosMutations';
-import { Alumno, CreateAlumnoRequest } from '../lib/api';
+import type { Alumno, CreateAlumnoRequest } from '../lib/api';
 import './App.css';
 
 function App() {
@@ -173,7 +173,7 @@ function App() {
 
         {/* Delete Confirmation Modal */}
         {showDeleteConfirm && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+          <div className="fixed inset-0 bg-gray-600/50 overflow-y-auto h-full w-full flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full mx-4">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Confirmar Eliminación</h3>
               <p className="text-sm text-gray-500 mb-4">

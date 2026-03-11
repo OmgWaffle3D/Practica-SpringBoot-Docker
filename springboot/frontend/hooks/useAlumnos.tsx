@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Alumno, api } from '../lib/api';
+import type { Alumno } from '../lib/api';
+import { api } from '../lib/api';
 
 export const useAlumnos = () => {
   const [alumnos, setAlumnos] = useState<Alumno[]>([]);

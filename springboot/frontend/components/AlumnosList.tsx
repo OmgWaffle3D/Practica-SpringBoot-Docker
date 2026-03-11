@@ -1,4 +1,4 @@
-import { Alumno } from '../lib/api';
+import type { Alumno } from '../lib/api';
 
 interface AlumnosListProps {
   alumnos: Alumno[];
@@ -32,6 +32,8 @@ export default function AlumnosList({ alumnos, onEdit, onDelete, loading = false
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grupo</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edad</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
           </tr>
         </thead>
@@ -47,6 +49,12 @@ export default function AlumnosList({ alumnos, onEdit, onDelete, loading = false
                   'bg-purple-100 text-purple-800'
                 }`}>
                   Grupo {alumno.grupo}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{alumno.email}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                  {alumno.edad} años
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

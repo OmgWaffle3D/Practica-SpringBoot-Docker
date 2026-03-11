@@ -1,0 +1,76 @@
+Preguntas de cierre
+
+Debes poder explicar:
+
+1. Por que una imagen no es lo mismo que un contenedor.
+
+RESPUESTA: Una imagen Docker es una plantilla inmutable que contiene el código, las dependencias, el sistema operativo base y la configuración necesarios para ejecutar una aplicación. Es como un "molde" o "blueprint" que se almacena en el disco.
+
+POr otro lado un contenedor es una instancia en ejecución de esa imagen. Osea, cuando ejecutas `docker run practica-spring-docker`, estás creando un contenedor basado en la imagen. 
+
+- **Imagen**: Plantilla estática almacenada (read-only)
+- **Contenedor**: Proceso en ejecución con su propio espacio de memoria, red y sistema de archivos
+
+Se pueden crear múltiples contenedores desde la misma imagen, cada uno ejecutándose independientemente.
+
+2. Que se pierde al eliminar un contenedor sin volumen.
+
+Al eliminar un contenedor sin volúmenes, se pierden **todos los datos que se almacenaron dentro del contenedor**:
+
+- Archivos creados o modificados durante la ejecución
+- Bases de datos almacenadas en el sistema de archivos del contenedor  
+- Logs de aplicación guardados internamente
+- Configuraciones personalizadas hechas en tiempo de ejecución
+- En nuestro caso: el archivo `items.json` con los datos de alumnos
+
+Esto pasa porque el contenedor tiene su propio sistema de archivos temporal que se elimina junto con el contenedor.
+
+3. Por que el JSON no debe guardarse dentro de recursos del `.jar`.
+
+Los recursos dentro del `.jar` son **inmutables** (read-only) en tiempo de ejecución:
+
+- No puedes escribir/modificar archivos dentro de `src/main/resources/` una vez empaquetado
+- Intentar guardar datos allí causaría errores de escritura
+- Al actualizar la aplicación, se perdería toda la información
+- Los recursos están comprimidos y optimizados para lectura solamente
+
+Por eso usamos rutas externas como `/app/data/items.json` que están fuera del JAR y pueden ser modificadas.
+
+4. Que ventaja tiene una imagen final mas ligera.
+
+Una imagen más ligera (como nuestro multistage build) ofrece múltiples ventajas:
+
+**Rendimiento:**
+- Descarga más rápida desde registros
+- Inicio de contenedores más veloz
+- Menor uso de memoria del host
+
+**Seguridad:**
+- Menor superficie de ataque (menos herramientas instaladas)
+- Reducción de vulnerabilidades potenciales
+- Solo incluye lo necesario para ejecutar
+
+**Operaciones:**
+- Menos espacio de almacenamiento requerido
+- Transferencias de red más eficientes
+- Costos reducidos en infraestructura cloud
+
+En nuestro caso: imagen final solo tiene JRE + JAR vs imagen de build con Maven + Node.js.
+
+5. Que hace el mapeo de puertos.
+
+El mapeo de puertos (`-p 8080:8080`) conecta un puerto del **host** con un puerto del **contenedor**:
+
+```bash
+docker run -p [puerto_host]:[puerto_contenedor] imagen
+```
+
+**En el ejemplo `-p 8080:8080`:**
+- Puerto 8080 del host (tu máquina) → Puerto 8080 del contenedor
+- Las peticiones a `localhost:8080` se redirigen al contenedor
+- Sin este mapeo, la aplicación solo estaría accesible dentro del contenedor
+
+**Flexibilidad:**
+- Puedes usar diferente puerto: `-p 3000:8080` (host:3000, contenedor:8080)
+- Múltiples puertos: `-p 8080:8080 -p 3306:3306`
+- Solo IP específica: `-p 127.0.0.1:8080:8080`
